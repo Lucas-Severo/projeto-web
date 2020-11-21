@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "jogos",
+  "info": {
+    "name": "Jogo",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "jg_nome": {
+      "type": "string"
+    },
+    "jg_descricao": {
+      "type": "text"
+    },
+    "jg_categoria": {
+      "type": "enumeration",
+      "enum": [
+        "ACAO",
+        "AVENTURA",
+        "ESTRATEGIA",
+        "RPG",
+        "ESPORTE",
+        "CORRIDA",
+        "JOGO_ONLINE"
+      ]
+    },
+    "jg_preco": {
+      "type": "decimal"
+    },
+    "jg_desenvolvedora": {
+      "type": "string"
+    },
+    "jg_imagem": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
+    },
+    "avaliacoes": {
+      "via": "jg_id",
+      "collection": "avaliacao"
+    }
+  }
+}

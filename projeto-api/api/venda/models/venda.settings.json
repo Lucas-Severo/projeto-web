@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vendas",
+  "info": {
+    "name": "Venda"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "ve_preco_total": {
+      "type": "decimal"
+    },
+    "us_id": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "vendas"
+    },
+    "itens": {
+      "via": "ve_id",
+      "collection": "item-venda"
+    }
+  }
+}
