@@ -1,0 +1,51 @@
+.authenticatePage {
+    background-color: rgb(222, 240, 223);
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px);
+    padding: 10px 0 10px 0;
+    background-color: rgb(202, 176, 139);
+}
+
+.credencial {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    padding-right: 10px;
+    width: 90px;
+}
+
+.input {
+    width: 300px;
+    padding: 5px;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.submitButton {
+    margin: 0 auto;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+}
+
+.submitButton:hover {
+    background-color: rgba(233, 233, 233, 0.7);
+}
+
+.errorMessage {
+    color: red;
+}

@@ -1,0 +1,16 @@
+.header {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    background-color: lightsalmon;
+    padding: 15px;
+}
+
+.logoutButton {
+    cursor: pointer;
+}
+
+.opcoes {
+    display: flex;
+    align-items: center;
+}
