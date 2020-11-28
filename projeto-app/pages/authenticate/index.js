@@ -1,7 +1,7 @@
 import style from './index.module.css'
 import Header from '../../components/header'
 import AuthenticateApiRequest from '../src/core/AuthenticateApiRequest'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
@@ -29,6 +29,7 @@ export default function Auth() {
         try {
             const {data} = await AuthenticateApiRequest.autenticar(email, password)
             sessionStorage.setItem('Authorization', `Bearer ${data.jwt}`)
+            sessionStorage.setItem('UserId', data.user.id)
             router.push('/jogos')
         } catch (error) {
             showErrorMessage("Erro ao tentar conectar, email ou senha inválidos")
@@ -60,10 +61,12 @@ export default function Auth() {
             <Header/>
             <div className={style.container}>
                 <form>
-                    <div className={style.credencial}>
-                        <label className={style.label} htmlFor="userName">Username:</label>
-                        <input autoComplete="off" onChange={event => setUserName(event.target.value)} className={style.input} type="text" id="userName"/>
-                    </div>
+                    { router.query.operation !== 'login' &&
+                        <div className={style.credencial}>
+                            <label className={style.label} htmlFor="userName">Username:</label>
+                            <input autoComplete="off" onChange={event => setUserName(event.target.value)} className={style.input} type="text" id="userName"/>
+                        </div>
+                    }
                     <div className={style.credencial}>
                         <label className={style.label} htmlFor="email">Email:</label>
                         <input autoComplete="off" onChange={event => setEmail(event.target.value)} className={style.input} type="email" id="email"/>
@@ -72,21 +75,23 @@ export default function Auth() {
                         <label className={style.label} htmlFor="password">Senha:</label>
                         <input autoComplete="off" onChange={event => setPassword(event.target.value)} className={style.input} type="password" id="password"/>
                     </div>
-                    <input onClick={handleClick} className={style.submitButton} value="Log In" type="submit"/>
-                    <input onClick={handleRegister} className={style.submitButton} value="Sign up" type="submit"/>
+                    { router.query.operation === 'login' ?
+                        <input onClick={handleClick} className={style.submitButton} value="Log In" type="submit"/>
+                        : <input onClick={handleRegister} className={style.submitButton} value="Sign up" type="submit"/>
+                    }
                     {
-                        error ? (
+                        error && (
                             <div>
                                 <p className={style.errorMessage}>{informationMessage}</p>
                             </div>
-                        ) : ''
+                        )
                     }
                     {
-                        sucess ? (
+                        sucess && (
                             <div>
                                 <p className={style.sucessMessage}>{informationMessage}</p>
                             </div>
-                        ) : ''
+                        )
                     }
                 </form>
             </div>

@@ -60,8 +60,19 @@
       "configurable": false
     },
     "vendas": {
-      "via": "us_id",
-      "collection": "venda"
+      "collection": "venda",
+      "via": "us_id"
+    },
+    "user_imagem": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
     }
   }
 }

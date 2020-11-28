@@ -14,9 +14,9 @@
       "type": "decimal"
     },
     "us_id": {
+      "via": "vendas",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "vendas"
+      "model": "user"
     },
     "itens": {
       "via": "ve_id",
