@@ -37,6 +37,7 @@ export default function Jogos({ jogos }) {
 
 export async function getServerSideProps() {
     const response = await JogoApiRequest.obterJogos()
+
     return {
         props: {
             jogos: response.data

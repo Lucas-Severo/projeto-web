@@ -25,7 +25,11 @@ export default function Header() {
 
     return (
         <header className={style.header}>
-            <div className={style.logo}>Logo</div>
+            <div className={style.logo}>
+                <Link href='/jogos'>
+                    <a>Logo</a>
+                </Link>
+            </div>
             <div className={style.opcoes}>
                 {
                     isLoggedIn ? (

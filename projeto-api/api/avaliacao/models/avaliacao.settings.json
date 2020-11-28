@@ -21,6 +21,9 @@
     "us_id": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "nota": {
+      "type": "decimal"
     }
   }
 }

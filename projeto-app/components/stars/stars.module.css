@@ -1,0 +1,8 @@
+.starsContainer {
+    display: flex;
+}
+
+.starsContainer p {
+    font-size: 30px;
+    font-weight: lighter;
+}
