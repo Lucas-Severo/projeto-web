@@ -1,0 +1,26 @@
+.header {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    background-color: #1C58ED;
+    padding: 15px;
+}
+
+.logoutButton {
+    cursor: pointer;
+}
+
+.opcoes {
+    display: flex;
+    align-items: center;
+    color: #EDAA05FF;
+}
+
+.opcoes a:hover {
+    color: #EDAA05AA;
+}
+
+.authenticate {
+    display: flex;
+    gap: 20px;
+}

@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/avaliacaos",
+      "handler": "avaliacao.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avaliacaos/count",
+      "handler": "avaliacao.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/avaliacaos/:id",
+      "handler": "avaliacao.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/avaliacaos",
+      "handler": "avaliacao.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/avaliacaos/:id",
+      "handler": "avaliacao.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/avaliacaos/:id",
+      "handler": "avaliacao.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

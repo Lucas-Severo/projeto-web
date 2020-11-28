@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "item_vendas",
+  "info": {
+    "name": "item_venda",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "jg_id": {
+      "model": "jogo"
+    },
+    "ve_id": {
+      "model": "venda",
+      "via": "itens"
+    },
+    "quantidade": {
+      "type": "integer"
+    }
+  }
+}

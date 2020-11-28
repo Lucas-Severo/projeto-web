@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "avaliacaos",
+  "info": {
+    "name": "Avaliacao",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "av_comentario": {
+      "type": "text"
+    },
+    "jg_id": {
+      "model": "jogo",
+      "via": "avaliacoes"
+    },
+    "us_id": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "nota": {
+      "type": "decimal"
+    }
+  }
+}

@@ -1,0 +1,102 @@
+.comentarios__title {
+    padding-top: 30px;
+    margin: 0 auto;
+}
+
+.comentarioSession {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px auto;
+    width: 600px;
+}
+
+.comentarioSession .txtArea {
+    resize: none;
+    width: 100%;
+}
+
+.comentarioSession button {
+    margin-top: 5px;
+    align-self: flex-end;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+}
+
+.game_info {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.game_info img {
+    width: 300px;
+    height: 168px;
+    margin: 0 auto
+}
+
+.comentarios {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.comentario {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    height: 100px;
+    padding: 10px;
+    list-style: none;
+    border: 1px solid lightgray;
+    background-color: rgba(100, 180, 180, 0.8);
+}
+
+.comentario__user_name {
+    color: #123F;
+}
+
+.comentario .texto {
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    color: #333;
+    font-weight: bold;
+}
+
+.comentario_actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 10px;
+}
+
+.comentario_actions button {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.comentario_actions button:disabled {
+    cursor: not-allowed;
+}
+
+.game__image {
+    position: relative;
+    display: flex;
+}
+
+.jogoNota {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
