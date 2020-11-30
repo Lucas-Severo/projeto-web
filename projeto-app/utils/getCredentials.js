@@ -1,7 +1,10 @@
+import {store} from '../redux/index'
+
 class getCredentials {
 
     getUserToken() {
-        const token = sessionStorage.getItem('Authorization')
+        const {userToken} = store.getState().userReducer
+        const token = userToken
 
         if (token && typeof token === 'string') {
             return token
@@ -9,7 +12,7 @@ class getCredentials {
     }
 
     getUserId() {
-        const userId = sessionStorage.getItem('UserId')
+        const {userId} = store.getState().userReducer
 
         return userId
     }

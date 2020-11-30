@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import {useState} from 'react'
 import style from './stars.module.css'
 
-export default function Stars({nota}) {
+export default function Stars({nota, uid}) {
     
     const [stars, setStars] = useState([])    
 
@@ -22,7 +22,7 @@ export default function Stars({nota}) {
     }, [])
 
     return (
-        <div className={style.starsContainer}>
+        <div key={uid} className={style.starsContainer}>
         <p>{nota}</p>
             {
                 stars.map(star => (

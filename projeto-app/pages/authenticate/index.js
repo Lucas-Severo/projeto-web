@@ -1,11 +1,13 @@
-import style from './index.module.css'
-import Header from '../../components/header'
-import AuthenticateApiRequest from '../src/core/AuthenticateApiRequest'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { connect } from 'react-redux'
+import Header from '../../components/header'
+import { addUserToken } from '../../redux/actions/userActions'
+import AuthenticateApiRequest from '../src/core/AuthenticateApiRequest'
+import style from './index.module.css'
 
-export default function Auth() {
+function Auth({dispatch}) {
 
     const router = useRouter();
     const [userName, setUserName] = useState();
@@ -28,8 +30,10 @@ export default function Auth() {
     const authenticate = async () => {
         try {
             const {data} = await AuthenticateApiRequest.autenticar(email, password)
-            sessionStorage.setItem('Authorization', `Bearer ${data.jwt}`)
-            sessionStorage.setItem('UserId', data.user.id)
+            dispatch(addUserToken({
+                jwt: `Bearer ${data.jwt}`, 
+                id: data.user.id, 
+                email: data.user.email}))
             router.push('/jogos')
         } catch (error) {
             showErrorMessage("Erro ao tentar conectar, email ou senha inválidos")
@@ -98,3 +102,7 @@ export default function Auth() {
         </div>
     );
 }
+
+export default connect(
+    state=>state
+)(Auth)

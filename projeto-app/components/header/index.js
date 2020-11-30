@@ -3,9 +3,12 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import isLogged from '../../utils/isLogged'
+import { removeUserToken } from '../../redux/actions/userActions'
+import { connect } from 'react-redux'
+import { openCart } from '../../redux/actions/cartActions'
+import Cart from '../cart/Cart'
 
-export default function Header() {
-
+function Header({dispatch}) {
     const router = useRouter()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -14,17 +17,18 @@ export default function Header() {
     })
 
     const handleLogout = () => {
-        sessionStorage.removeItem('Authorization')
+        dispatch(removeUserToken())
 
-        if (router.route === '/jogos') {
-            router.reload()
-        } else {
-            router.push('/authenticate?operation=login')
-        }
+        router.push('/authenticate?operation=login')
+    }
+
+    const handleOpenCart = () => {
+        dispatch(openCart())
     }
 
     return (
         <header className={style.header}>
+            <Cart/>
             <div className={style.logo}>
                 <Link href='/jogos'>
                     <a>Logo</a>
@@ -33,8 +37,13 @@ export default function Header() {
             <div className={style.opcoes}>
                 {
                     isLoggedIn ? (
-                        <div onClick={handleLogout}>
-                            <p className={style.logoutButton}>Logout</p>
+                        <div>
+                            <div onClick={handleLogout}>
+                                <p className={style.logoutButton}>Logout</p>
+                            </div>
+                            <div>
+                                <button onClick={handleOpenCart}>Open cart</button>
+                            </div>
                         </div>
                     ) : (
                         <div className={style.authenticate}>
@@ -51,3 +60,7 @@ export default function Header() {
         </header>
     );
 }
+
+export default connect(
+    state=>state
+)(Header)

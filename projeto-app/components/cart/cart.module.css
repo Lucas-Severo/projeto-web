@@ -1,0 +1,18 @@
+.cartContainer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    height: 100vh;
+    width: 300px;
+    z-index: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.cartItems {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}

@@ -1,5 +1,9 @@
+import {store} from '../redux/index'
+
 export default function getToken() {
-    const token = sessionStorage.getItem('Authorization')
+    const {userToken} = store.getState().userReducer
+
+    const token = userToken
 
     if (token && typeof token === 'string') {
         return true
