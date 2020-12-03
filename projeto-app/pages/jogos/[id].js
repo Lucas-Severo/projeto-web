@@ -5,29 +5,35 @@ import Header from '../../components/header'
 import Stars from '../../components/stars/Stars'
 import Warning from '../../components/warnings/warning'
 import { addItem } from '../../redux/actions/main'
-import { addAvaliacao, setAvaliacoes, nextPage, previousPage } from '../../redux/actions/avaliacoesActions'
-import GetJogoMedia from '../../utils/getJogoMedia'
+import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage } from '../../redux/actions/avaliacoesActions'
 import IsLogged from '../../utils/isLogged'
 import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
 import JogoApiRequest from '../src/core/JogoApiRequest'
+import humanizarCategorias from '../../utils/humanizarCategorias'
 import style from './jogo.module.css'
 
 function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPreviousButtonDisabled] = useState(true)
-    const [avaliacao, setAvaliacao] = useState()
+    const [avaliacao, setAvaliacao] = useState('')
     const [nota, setNota] = useState(0)
+    const [stars, setStars] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [warnings, setWarnings] = useState('')
 
     useEffect(() => {
+        dispatch(resetaPage())
         dispatch(setAvaliacoes(avaliacoes))
 
         verificarBotoes()
 
         setIsLoggedIn(IsLogged())
     }, [])
+
+    useEffect(() => {
+        setStars(avaliacaoReducer.notaMedia)
+    }, [avaliacaoReducer.notaMedia])
 
     const avancarPagina = () => {
         dispatch(nextPage({page: avaliacaoReducer.pagination.page + 1}))
@@ -48,8 +54,6 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
             setPreviousButtonDisabled(false)
         }
 
-        console.log(avaliacaoReducer.pagination.page)
-        console.log(avaliacaoReducer.pagination.totalPages)
         if (avaliacaoReducer.pagination.page >= avaliacaoReducer.pagination.totalPages) {
             setNextButtonDisabled(true)
         } else {
@@ -66,6 +70,8 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
             }
             const {data} = await AvaliacaoApiRequest.salvar(requestBody)
             dispatch(addAvaliacao(data))
+            verificarBotoes()
+            limparCampos()
         }
     }
 
@@ -98,6 +104,11 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
         dispatch(addItem(jogo))
     }
 
+    const limparCampos = () => {
+        setAvaliacao('')
+        setNota(0)
+    }
+
     return (
         <div>
             <Head>
@@ -110,10 +121,15 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                         <img 
                             src={'http://localhost:1337'+jogo.jg_imagem[0].formats.thumbnail.url}  
                         />
-                        <div className={style.jogoNota}><Stars uid={jogo.id} nota={GetJogoMedia.getMedia(jogo)}/></div>
+                        <div className={style.jogoNota}>
+                            <Stars key={"jogo__"+jogo.id} 
+                                uid={jogo.id}
+                                nota={stars}/>
+                        </div>
                     </div>
                     <p>Nome: {jogo.jg_nome}</p>
                     <p>Descrição: {jogo.jg_descricao}</p>
+                    <p>Categoria: {humanizarCategorias(jogo.jg_categoria)}</p>
                     <p>Desenvolvedora: {jogo.jg_desenvolvedora}</p>
                     <p>Preço: R$ {jogo.jg_preco}</p>
                     {isLoggedIn &&
@@ -154,7 +170,7 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                             <p className={style.texto}>{avaliacao.av_comentario}</p>
                             </div>
                             <div className={style.stars}>
-                                <Stars uid={avaliacao.id} nota={avaliacao.nota}/>
+                                <Stars uid={"avaliacao__"+avaliacao.id} nota={avaliacao.nota}/>
                             </div>
                         </li>
                     ))

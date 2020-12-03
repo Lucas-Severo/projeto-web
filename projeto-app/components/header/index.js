@@ -8,12 +8,17 @@ import { connect } from 'react-redux'
 import { openCart } from '../../redux/actions/cartActions'
 import Cart from '../cart/Cart'
 
-function Header({dispatch}) {
+function Header({dispatch, userReducer}) {
     const router = useRouter()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [userName, setUserName] = useState('')
 
     useEffect(() => { 
         setIsLoggedIn(isLogged())
+
+        if(isLoggedIn) {
+            setUserName(userReducer.userName)
+        }
     })
 
     const handleLogout = () => {
@@ -37,7 +42,8 @@ function Header({dispatch}) {
             <div className={style.opcoes}>
                 {
                     isLoggedIn ? (
-                        <div>
+                        <div className={style.userContainer}>
+                            <p className={style.userName}>{userName}</p>
                             <div onClick={handleLogout}>
                                 <p className={style.logoutButton}>Logout</p>
                             </div>

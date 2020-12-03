@@ -3,7 +3,8 @@ import { ADD_USER_TOKEN, REMOVE_USER_TOKEN } from '../actions/actionTypes'
 const initialState = {
     userId: 0,
     userEmail: '',
-    userToken: ''
+    userToken: '',
+    userName: ''
 }
 
 const userReducer = (state = initialState, action) => {
@@ -12,6 +13,7 @@ const userReducer = (state = initialState, action) => {
             state.userId = action.payload.id
             state.userEmail = action.payload.email
             state.userToken = action.payload.jwt
+            state.userName = action.payload.userName
             return {...state}
         case REMOVE_USER_TOKEN:
             state = initialState

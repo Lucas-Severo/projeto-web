@@ -7,26 +7,27 @@ export default function Stars({nota, uid}) {
     const [stars, setStars] = useState([])    
 
     useEffect(() => {
-        const stars = []
+        const starsArray = []
         const positiveStars = Math.floor(nota)
         const negativeStars = 5 - Math.floor(nota)
 
         for(let i = 0; i < positiveStars; i++) {
-            stars.push('⭑')
+            starsArray.push('⭑')
         }
 
         for(let i = 0; i < negativeStars; i++) {
-            stars.push('⭒')
+            starsArray.push('⭒')
         }
-        setStars(stars)
-    }, [])
+
+        setStars(starsArray)
+    }, [nota])
 
     return (
         <div key={uid} className={style.starsContainer}>
-        <p>{nota}</p>
+        <p key={uid}>{nota}</p>
             {
-                stars.map(star => (
-                    <p>{star}</p>
+                stars.map((star, index) => (
+                    <p key={uid+"__star__"+index}>{star}</p>
                 ))
             }
         </div>

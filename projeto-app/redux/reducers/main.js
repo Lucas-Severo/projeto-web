@@ -33,6 +33,7 @@ const main = (state = initialState, action) => {
             return {...state}
         case REMOVE_ITEM:
             state.items = state.items.filter(item => item.id !== action.payload.id)
+            state.totalPrice = calcularValorTotal(state)
             return {...state}
         case GET_ITEMS:
             return {...state}
