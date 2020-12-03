@@ -1,11 +1,13 @@
-import style from './index.module.css'
-import Header from '../../components/header'
-import AuthenticateApiRequest from '../src/core/AuthenticateApiRequest'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+import Header from '../../components/header'
+import { addUserToken } from '../../redux/actions/userActions'
+import AuthenticateApiRequest from '../src/core/AuthenticateApiRequest'
+import style from './index.module.css'
 
-export default function Auth() {
+function Auth({dispatch}) {
 
     const router = useRouter();
     const [userName, setUserName] = useState();
@@ -14,6 +16,11 @@ export default function Auth() {
     const [error, setError] = useState(false);
     const [sucess, setSucess] = useState(false);
     const [informationMessage, setInformationMessage] = useState();
+
+    useEffect(() => {
+        limparCampos()
+        limparMessages()
+    }, [router.query])
 
     const handleClick = event => {
         event.preventDefault()
@@ -28,11 +35,15 @@ export default function Auth() {
     const authenticate = async () => {
         try {
             const {data} = await AuthenticateApiRequest.autenticar(email, password)
-            sessionStorage.setItem('Authorization', `Bearer ${data.jwt}`)
-            sessionStorage.setItem('UserId', data.user.id)
+            dispatch(addUserToken({
+                jwt: `Bearer ${data.jwt}`, 
+                id: data.user.id, 
+                email: data.user.email,
+                userName: data.user.username}))
             router.push('/jogos')
         } catch (error) {
             showErrorMessage("Erro ao tentar conectar, email ou senha inválidos")
+            limparMessages()
         }
     }
 
@@ -42,9 +53,25 @@ export default function Auth() {
             setError(false)
             setSucess(true)
             setInformationMessage('registrado com sucesso!')
+            limparCampos()
         } catch (error) {
             showErrorMessage("Erro ao tentar registrar conta")
+            limparMessages()
         }
+    }
+
+    const limparCampos = () => {
+        setUserName("")
+        setEmail("")
+        setPassword("")
+    }
+
+    const limparMessages = () => {
+        setTimeout(() => {
+            setError(false)
+            setSucess(false)
+            showErrorMessage("")
+        }, 1500)
     }
 
      const showErrorMessage = (message) => {
@@ -64,16 +91,16 @@ export default function Auth() {
                     { router.query.operation !== 'login' &&
                         <div className={style.credencial}>
                             <label className={style.label} htmlFor="userName">Username:</label>
-                            <input autoComplete="off" onChange={event => setUserName(event.target.value)} className={style.input} type="text" id="userName"/>
+                            <input autoComplete="off" value={userName} onChange={event => setUserName(event.target.value)} className={style.input} type="text" id="userName"/>
                         </div>
                     }
                     <div className={style.credencial}>
                         <label className={style.label} htmlFor="email">Email:</label>
-                        <input autoComplete="off" onChange={event => setEmail(event.target.value)} className={style.input} type="email" id="email"/>
+                        <input autoComplete="off" value={email} onChange={event => setEmail(event.target.value)} className={style.input} type="email" id="email"/>
                     </div>
                     <div className={style.credencial}>
                         <label className={style.label} htmlFor="password">Senha:</label>
-                        <input autoComplete="off" onChange={event => setPassword(event.target.value)} className={style.input} type="password" id="password"/>
+                        <input autoComplete="off" value={password} onChange={event => setPassword(event.target.value)} className={style.input} type="password" id="password"/>
                     </div>
                     { router.query.operation === 'login' ?
                         <input onClick={handleClick} className={style.submitButton} value="Log In" type="submit"/>
@@ -98,3 +125,7 @@ export default function Auth() {
         </div>
     );
 }
+
+export default connect(
+    state=>state
+)(Auth)

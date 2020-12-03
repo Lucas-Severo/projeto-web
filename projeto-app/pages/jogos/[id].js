@@ -1,103 +1,64 @@
-import JogoApiRequest from '../src/core/JogoApiRequest'
-import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
-import Header from '../../components/header'
 import Head from 'next/head'
-import IsLogged from '../../utils/isLogged'
-import style from './jogo.module.css'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import GetJogoMedia from '../../utils/getJogoMedia'
-import Warning from '../../components/warnings/warning'
+import { connect } from 'react-redux'
+import Header from '../../components/header'
 import Stars from '../../components/stars/Stars'
+import Warning from '../../components/warnings/warning'
+import { addItem } from '../../redux/actions/main'
+import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage } from '../../redux/actions/avaliacoesActions'
+import IsLogged from '../../utils/isLogged'
+import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
+import JogoApiRequest from '../src/core/JogoApiRequest'
+import humanizarCategorias from '../../utils/humanizarCategorias'
+import style from './jogo.module.css'
 
-const pagination = {
-    start: 0,
-    end: 8,
-    total: 0,
-    totalPages: 0,
-    page: 1
-}
+function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
-export default function Jogo({jogo, avaliacoes}) {
-
-    const router = useRouter()
-    const [comentarios, setComentarios] = useState([]) 
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPreviousButtonDisabled] = useState(true)
-    const [avaliacao, setAvaliacao] = useState()
+    const [avaliacao, setAvaliacao] = useState('')
     const [nota, setNota] = useState(0)
+    const [stars, setStars] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [warnings, setWarnings] = useState('')
 
     useEffect(() => {
-        pagination.total = avaliacoes.length
-        pagination.totalPages = Math.ceil(pagination.total / pagination.end)
+        dispatch(resetaPage())
+        dispatch(setAvaliacoes(avaliacoes))
 
         verificarBotoes()
 
-        tratarEventoPaginar(0)
-    
         setIsLoggedIn(IsLogged())
     }, [])
 
-    const tratarEventoPaginar = (start) => {
-        pagination.start = start
-        const data = []
-
-        for (let [index, comentario] of avaliacoes.entries()) {
-            if (index >= pagination.start && index < (pagination.start + pagination.end)) {
-                data.push(comentario)
-            }
-        }
-
-        if (pagination.start + pagination.end < pagination.total) {
-
-        }
-
-        setComentarios(data)
-    }
+    useEffect(() => {
+        setStars(avaliacaoReducer.notaMedia)
+    }, [avaliacaoReducer.notaMedia])
 
     const avancarPagina = () => {
-        pagination.page = pagination.page + 1
+        dispatch(nextPage({page: avaliacaoReducer.pagination.page + 1}))
 
         verificarBotoes()
-
-        tratarEventoPaginar(pagination.start + pagination.end)
     }
 
     const retornarPagina = () => {
-        pagination.page = pagination.page - 1
+        dispatch(previousPage({page: avaliacaoReducer.pagination.page - 1}))
 
         verificarBotoes()
-
-        tratarEventoPaginar(pagination.start - pagination.end)
     }
 
     const verificarBotoes = () => {
-        if (pagination.page === 1) {
+        if (avaliacaoReducer.pagination.page === 1) {
             setPreviousButtonDisabled(true)
         } else {
             setPreviousButtonDisabled(false)
         }
 
-        if (pagination.page >= pagination.totalPages) {
+        if (avaliacaoReducer.pagination.page >= avaliacaoReducer.pagination.totalPages) {
             setNextButtonDisabled(true)
         } else {
             setNextButtonDisabled(false)
         }
-    }
-
-    const getUserImagem = (avaliacao) => {
-        if (hasImage(avaliacao)) {
-            return "http://localhost:1337"+avaliacao.us_id.user_imagem.formats.thumbnail.url
-        }
-    }
-
-    const hasImage = (avaliacao) => {
-        if (avaliacao.us_id.user_imagem) {
-            return true
-        }
-        return false
     }
 
     const handleSaveComment = async () => {
@@ -107,8 +68,10 @@ export default function Jogo({jogo, avaliacoes}) {
                 jg_id: jogo.id,
                 nota: nota
             }
-            await AvaliacaoApiRequest.salvar(requestBody)
-            router.reload()
+            const {data} = await AvaliacaoApiRequest.salvar(requestBody)
+            dispatch(addAvaliacao(data))
+            verificarBotoes()
+            limparCampos()
         }
     }
 
@@ -137,6 +100,15 @@ export default function Jogo({jogo, avaliacoes}) {
         return hasWarnings
     }
 
+    const adicionarItemCarrinho = () => {
+        dispatch(addItem(jogo))
+    }
+
+    const limparCampos = () => {
+        setAvaliacao('')
+        setNota(0)
+    }
+
     return (
         <div>
             <Head>
@@ -149,18 +121,23 @@ export default function Jogo({jogo, avaliacoes}) {
                         <img 
                             src={'http://localhost:1337'+jogo.jg_imagem[0].formats.thumbnail.url}  
                         />
-                        <p className={style.jogoNota}><Stars key={jogo.id} nota={GetJogoMedia.getMedia(jogo)}/></p>
+                        <div className={style.jogoNota}>
+                            <Stars key={"jogo__"+jogo.id} 
+                                uid={jogo.id}
+                                nota={stars}/>
+                        </div>
                     </div>
                     <p>Nome: {jogo.jg_nome}</p>
                     <p>Descrição: {jogo.jg_descricao}</p>
+                    <p>Categoria: {humanizarCategorias(jogo.jg_categoria)}</p>
                     <p>Desenvolvedora: {jogo.jg_desenvolvedora}</p>
                     <p>Preço: R$ {jogo.jg_preco}</p>
                     {isLoggedIn &&
-                        <button>Adicionar ao carrinho</button>
+                        <button onClick={adicionarItemCarrinho}>Adicionar ao carrinho</button>
                     }
                 </div>
 
-                <h1 className={style.comentarios__title}>Comentários ({pagination.total})</h1>
+                <h1 className={style.comentarios__title}>Comentários ({avaliacaoReducer.avaliacoes.length})</h1>
                 
                 {
                     isLoggedIn && <div className={style.comentarioSession}>
@@ -186,14 +163,14 @@ export default function Jogo({jogo, avaliacoes}) {
                 }
                 <ul className={style.comentarios}>
                 {
-                    comentarios.map(avaliacao => (
+                    avaliacaoReducer.avaliacao_paginate.map(avaliacao => (
                         <li className={style.comentario} key={avaliacao.id}>
                             <div>
                             <p className={style.comentario__user_name}>Usuário: {avaliacao.us_id.username}</p>
                             <p className={style.texto}>{avaliacao.av_comentario}</p>
                             </div>
                             <div className={style.stars}>
-                                <Stars key={avaliacao.id} nota={avaliacao.nota}/>
+                                <Stars uid={"avaliacao__"+avaliacao.id} nota={avaliacao.nota}/>
                             </div>
                         </li>
                     ))
@@ -230,3 +207,7 @@ export async function getServerSideProps({query}) {
         }
     }
 }
+
+export default connect(
+    state=>state
+)(Jogo)

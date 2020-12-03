@@ -7,11 +7,12 @@ import styles from './home.module.css'
 export default function Jogos({ jogos }) {
     return (
         <>
-            <Head>
-                <title>Jogos</title>
-            </Head>
-            <Header />
-            <p>Jogos disponíveis</p>
+        <Head>
+            <title>Jogos</title>
+        </Head>
+        <Header />
+        <div className={styles.container}>
+            <p className={styles.title}>Jogos disponíveis ({jogos.length})</p>
             <ul className={styles.games}>
                 {
                     jogos.map((jogo) => (
@@ -30,8 +31,9 @@ export default function Jogos({ jogos }) {
                     ))
                 }
             </ul>
+        </div>
         </>
-    );
+    )
 }
 
 

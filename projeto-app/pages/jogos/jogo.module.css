@@ -35,6 +35,15 @@
     margin: 0 auto;
 }
 
+.game_info p {
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
 .game_info img {
     width: 300px;
     height: 168px;
