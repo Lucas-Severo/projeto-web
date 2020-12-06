@@ -1,4 +1,4 @@
-import { ADD_AVALIACAO, NEXT_PAGE, PREVIOUS_PAGE, SET_AVALIACOES, RESETA_PAGE } from './actionTypes'
+import { ADD_AVALIACAO, NEXT_PAGE, PREVIOUS_PAGE, SET_AVALIACOES, RESETA_PAGE, SET_NOTA } from './actionTypes'
 
 export const addAvaliacao = (item) => ({
     type: ADD_AVALIACAO,
@@ -20,4 +20,9 @@ export const previousPage = () => ({
 
 export const resetaPage = () => ({
     type: RESETA_PAGE
+})
+
+export const setNota = (nota) => ({
+    type: SET_NOTA,
+    payload: nota
 })

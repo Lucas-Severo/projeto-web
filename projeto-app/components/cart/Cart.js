@@ -3,6 +3,7 @@ import style from './cart.module.css'
 import formatMoney from '../../utils/formatMoney'
 import { closeCart } from '../../redux/actions/cartActions'
 import { incrementItem, decrementItem, removeItem } from '../../redux/actions/main'
+import DoubleArrow from '@material-ui/icons/DoubleArrow'
 
 function Cart({dispatch, state, cartReducer}) {
 
@@ -31,7 +32,7 @@ function Cart({dispatch, state, cartReducer}) {
                     {
                         state.items.map((item) => (
                             <div className={style.cartItem}>
-                                <p>{item.jg_nome}</p>
+                                <p className={style.cartItemGameName}>{item.jg_nome}</p>
                                 <p>Quantidade: {item.quantidade}</p>
                                 <p>Preço: {formatMoney(item.jg_preco)}</p>
                                 <button className={style.cartItemActions} onClick={() => handleIncrementItem(item)}>+</button>
@@ -43,7 +44,9 @@ function Cart({dispatch, state, cartReducer}) {
 
                     <div className={style.cartBottom}>
                         <p>Preço Total: {formatMoney(state.totalPrice)}</p>
-                        <button onClick={handleCloseCart}>{'>>'}</button>
+                        <button onClick={handleCloseCart}>
+                            <DoubleArrow/>
+                        </button>
                     </div>
                 </div>
             }
