@@ -1,64 +1,51 @@
-import {ADD_AVALIACAO, SET_AVALIACOES, NEXT_PAGE, PREVIOUS_PAGE, RESETA_PAGE, SET_NOTA} from '../actions/actionTypes'
+import 
+{
+    ADD_JOGO, 
+    SET_JOGOS, 
+    NEXT_PAGE_JOGOS, 
+    PREVIOUS_PAGE_JOGOS
+} from '../actions/actionTypes'
+
 
 const initialState = {
-    avaliacoes: [],
+    jogos: [],
+    totalJogos: 0,
     pagination: {
         start: 0,
-        limit: 8,
-        totalPages: 1,
-        totalItems: 0,
+        limit: 9,
         page: 1,
-        itemsPerPage: 8
+        totalPages: 1,
+        itemsPerPage: 9
     },
-    previousButtonDisabled: true,
     nextButtonDisabled: true,
-    nota: 0,
-    notaMedia: 0
+    previousButtonDisabled: true
 }
 
-const avalicaoReducer = (state = initialState, action) => {
+const jogoReducer = (state = initialState, action) => {
     switch(action.type) {
-        case ADD_AVALIACAO:
-            state.pagination.totalItems += 1
-
-            state.notaMedia = 0
+        case ADD_JOGO:
+            state.jogos.push(action.payload)
             return {...state}
-        case SET_AVALIACOES:
-            state.notaMedia = 0
-            state.avaliacoes = action.payload.item
-            state.pagination.totalItems = action.payload.totalItems
-
-            state.pagination.totalPages = Math.ceil(state.pagination.totalItems / state.pagination.itemsPerPage)
-
+        case SET_JOGOS:
+            state.jogos = action.payload.jogos
+            state.totalJogos = action.payload.totalJogos
+            state.pagination.totalPages = Math.ceil(state.totalJogos / state.pagination.itemsPerPage)
             state.previousButtonDisabled = previousButtonDisabled(state.pagination)
             state.nextButtonDisabled = nextButtonDisabled(state.pagination)
-
-            state.notaMedia = 0
+            
             return {...state}
-        case NEXT_PAGE:
+        case NEXT_PAGE_JOGOS:
             state.pagination.page += 1
             state.pagination.start += state.pagination.itemsPerPage
-
             state.previousButtonDisabled = previousButtonDisabled(state.pagination)
             state.nextButtonDisabled = nextButtonDisabled(state.pagination)
 
             return {...state}
-        case PREVIOUS_PAGE:
+        case PREVIOUS_PAGE_JOGOS:
             state.pagination.page -= 1
             state.pagination.start -= state.pagination.itemsPerPage
-
             state.previousButtonDisabled = previousButtonDisabled(state.pagination)
             state.nextButtonDisabled = nextButtonDisabled(state.pagination)
-
-            return {...state}
-        case RESETA_PAGE:
-            state.pagination.page = 1
-            state.pagination.start = 0
-
-            return {...state}
-
-        case SET_NOTA:
-            state.nota = action.payload
 
             return {...state}
         default:
@@ -74,4 +61,4 @@ function nextButtonDisabled(pagination) {
     return pagination.page >= pagination.totalPages
 }
 
-export default avalicaoReducer
+export default jogoReducer

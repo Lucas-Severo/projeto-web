@@ -47,8 +47,12 @@
       "required": false
     },
     "avaliacoes": {
-      "via": "jg_id",
-      "collection": "avaliacao"
+      "collection": "avaliacao",
+      "via": "jg_id"
+    },
+    "slug": {
+      "type": "uid",
+      "required": true
     }
   }
 }

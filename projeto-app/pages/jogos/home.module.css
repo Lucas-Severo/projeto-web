@@ -62,3 +62,19 @@
 .game_name:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.jogos_actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 10px;
+}
+
+.jogos_actions button {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.jogos_actions button:disabled {
+    cursor: not-allowed;
+}

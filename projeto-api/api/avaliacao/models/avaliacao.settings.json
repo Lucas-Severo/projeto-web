@@ -15,8 +15,8 @@
       "type": "text"
     },
     "jg_id": {
-      "model": "jogo",
-      "via": "avaliacoes"
+      "via": "avaliacoes",
+      "model": "jogo"
     },
     "us_id": {
       "plugin": "users-permissions",
