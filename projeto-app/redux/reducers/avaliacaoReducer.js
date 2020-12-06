@@ -1,4 +1,4 @@
-import {ADD_AVALIACAO, SET_AVALIACOES, NEXT_PAGE, PREVIOUS_PAGE, RESETA_PAGE} from '../actions/actionTypes'
+import {ADD_AVALIACAO, SET_AVALIACOES, NEXT_PAGE, PREVIOUS_PAGE, RESETA_PAGE, SET_NOTA} from '../actions/actionTypes'
 
 const initialState = {
     avaliacoes: [],
@@ -10,6 +10,7 @@ const initialState = {
         totalPages: 0,
         page: 1
     },
+    nota: 0,
     notaMedia: 0
 }
 
@@ -38,7 +39,7 @@ const avalicaoReducer = (state = initialState, action) => {
                 .map(comentario => comentario.nota)
                 .reduce((accumulator, currVal) => accumulator + currVal)
             
-            state.notaMedia = (state.notaMedia / state.pagination.total).toFixed(2)
+            state.notaMedia = (state.notaMedia / state.pagination.total).toFixed(1)
             return {...state}
         case SET_AVALIACOES:
             state.notaMedia = 0
@@ -57,11 +58,13 @@ const avalicaoReducer = (state = initialState, action) => {
             state.avaliacoes = action.payload
             state.avaliacao_paginate = avaliacoes
 
-            state.notaMedia = state.avaliacoes
-                .map(comentario => comentario.nota)
-                .reduce((accumulator, currVal) => accumulator + currVal)
-            
-            state.notaMedia = (state.notaMedia / state.pagination.total).toFixed(2)
+            if (state.avaliacoes.length > 0) {
+                state.notaMedia = state.avaliacoes
+                    .map(comentario => comentario.nota)
+                    .reduce((accumulator, currVal) => accumulator + currVal)
+                
+                state.notaMedia = (state.notaMedia / state.pagination.total).toFixed(1)
+            }
             return {...state}
         case NEXT_PAGE:
             state.pagination.page += 1
@@ -94,6 +97,11 @@ const avalicaoReducer = (state = initialState, action) => {
         case RESETA_PAGE:
             state.pagination.page = 1
             state.pagination.start = 0
+
+            return {...state}
+
+        case SET_NOTA:
+            state.nota = action.payload
 
             return {...state}
         default:

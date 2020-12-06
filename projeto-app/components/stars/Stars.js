@@ -1,6 +1,9 @@
 import { useEffect } from "react"
 import {useState} from 'react'
 import style from './stars.module.css'
+import StarOutlinedIcon from '@material-ui/icons/StarOutlined'
+import StarOutlineOutlinedIcon from '@material-ui/icons/StarOutlineOutlined';
+import StarHalfOutlinedIcon from '@material-ui/icons/StarHalfOutlined';
 
 export default function Stars({nota, uid}) {
     
@@ -9,14 +12,19 @@ export default function Stars({nota, uid}) {
     useEffect(() => {
         const starsArray = []
         const positiveStars = Math.floor(nota)
-        const negativeStars = 5 - Math.floor(nota)
+        const halfStars = Math.floor((nota - positiveStars) / 0.5)
+        const negativeStars = 5 - positiveStars - halfStars
 
         for(let i = 0; i < positiveStars; i++) {
-            starsArray.push('⭑')
+            starsArray.push(<StarOutlinedIcon className={style.goldStar}/>)
+        }
+
+        for (let i = 0; i < halfStars; i++) {
+            starsArray.push(<StarHalfOutlinedIcon className={style.goldStar}/>)
         }
 
         for(let i = 0; i < negativeStars; i++) {
-            starsArray.push('⭒')
+            starsArray.push(<StarOutlineOutlinedIcon/>)
         }
 
         setStars(starsArray)

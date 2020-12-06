@@ -1,0 +1,12 @@
+.nota,
+.nota_selecionada {
+    cursor: pointer;
+}
+
+.nota_selecionada {
+    color: yellow;
+}
+
+.starsContainer {
+    margin-top: 10px;
+}

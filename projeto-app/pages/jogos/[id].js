@@ -5,19 +5,23 @@ import Header from '../../components/header'
 import Stars from '../../components/stars/Stars'
 import Warning from '../../components/warnings/warning'
 import { addItem } from '../../redux/actions/main'
-import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage } from '../../redux/actions/avaliacoesActions'
+import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage, setNota } from '../../redux/actions/avaliacoesActions'
 import IsLogged from '../../utils/isLogged'
 import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
 import JogoApiRequest from '../src/core/JogoApiRequest'
 import humanizarCategorias from '../../utils/humanizarCategorias'
 import style from './jogo.module.css'
+import SelectNota from '../../components/selectNota/SelectNota'
+import Tooltip from '../../components/tooltip/Tooltip'
+import formatMoney from '../../utils/formatMoney'
+import Add from '@material-ui/icons/Add'
+import Send from '@material-ui/icons/Send'
 
 function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
     const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
     const [previousButtonDisabled, setPreviousButtonDisabled] = useState(true)
     const [avaliacao, setAvaliacao] = useState('')
-    const [nota, setNota] = useState(0)
     const [stars, setStars] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [warnings, setWarnings] = useState('')
@@ -66,7 +70,7 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
             const requestBody = {
                 av_comentario: avaliacao,
                 jg_id: jogo.id,
-                nota: nota
+                nota: avaliacaoReducer.nota
             }
             const {data} = await AvaliacaoApiRequest.salvar(requestBody)
             dispatch(addAvaliacao(data))
@@ -78,7 +82,7 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
     const checkWarnings = () => {
         let hasWarnings = false
 
-        if (nota < 1 || nota > 5) {
+        if (avaliacaoReducer.nota < 1 || avaliacaoReducer.nota > 5) {
             setWarnings('Nota deve estar entre 1 e 5')
             hasWarnings = true
         }
@@ -90,6 +94,11 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
         if (avaliacao && avaliacao.length < 3) {
             setWarnings('Avaliação deve possuir mais do que 3 caracteres')
+            hasWarnings = true
+        }
+
+        if (avaliacao && avaliacao.length > 500) {
+            setWarnings('Avaliação não pode possuir mais do que 500 caracteres')
             hasWarnings = true
         }
 
@@ -106,7 +115,7 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
     const limparCampos = () => {
         setAvaliacao('')
-        setNota(0)
+        dispatch(setNota(0))
     }
 
     return (
@@ -121,19 +130,35 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                         <img 
                             src={'http://localhost:1337'+jogo.jg_imagem[0].formats.thumbnail.url}  
                         />
-                        <div className={style.jogoNota}>
-                            <Stars key={"jogo__"+jogo.id} 
-                                uid={jogo.id}
-                                nota={stars}/>
+                        <div className={style.game__stars}>
+                            <div className={style.jogoNota}>
+                                <Stars key={"jogo__"+jogo.id} 
+                                    uid={jogo.id}
+                                    nota={stars}/>
+                            </div>
                         </div>
                     </div>
-                    <p>Nome: {jogo.jg_nome}</p>
-                    <p>Descrição: {jogo.jg_descricao}</p>
-                    <p>Categoria: {humanizarCategorias(jogo.jg_categoria)}</p>
-                    <p>Desenvolvedora: {jogo.jg_desenvolvedora}</p>
-                    <p>Preço: R$ {jogo.jg_preco}</p>
+                    <div className={`${style.infoContainer} ${style.tooltip}`}>
+                        <p className={style.row}>Nome </p>
+                        <p className={style.row}>{jogo.jg_nome}</p>
+                        <p className={style.row}>Descrição</p>
+                        <div className={style.row}>
+                            <Tooltip message={jogo.jg_descricao}/>
+                        </div>
+                        <p className={style.row}>Categoria</p>
+                        <p className={style.row}>{humanizarCategorias(jogo.jg_categoria)}</p>
+                        <p className={style.row}>Desenvolvedora</p>
+                        <p className={style.row}>{jogo.jg_desenvolvedora}</p>
+                        <p className={style.row}>Preço</p>
+                        <p className={style.row}>{formatMoney(jogo.jg_preco)}</p>
+                    </div>
                     {isLoggedIn &&
-                        <button onClick={adicionarItemCarrinho}>Adicionar ao carrinho</button>
+                        <button 
+                            className={style.buttonAddToCart} 
+                            onClick={adicionarItemCarrinho}>
+                                <p>Adicionar ao carrinho</p>
+                                <Add/>
+                        </button>
                     }
                 </div>
 
@@ -147,17 +172,13 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                             onChange={(event) => setAvaliacao(event.target.value)}
                             rows='5'
                             className={style.txtArea}/>
-                        <p>Nota: 
-                            <input
-                                name='nota'
-                                min='1' 
-                                max='5' 
-                                step='0.5'
-                                value={nota}
-                                onChange={(event) => setNota(event.target.value)}
-                                type='number'/>
-                            </p>
-                        <button onClick={handleSaveComment}>Enviar comentário</button>
+                        <SelectNota/>
+                        <button 
+                            className={style.buttonSendComment}
+                            onClick={handleSaveComment}>
+                                <p>Enviar comentário</p>
+                                <Send/>
+                        </button>
                         <Warning message={warnings}/>
                     </div>
                 }
@@ -165,9 +186,11 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                 {
                     avaliacaoReducer.avaliacao_paginate.map(avaliacao => (
                         <li className={style.comentario} key={avaliacao.id}>
-                            <div>
-                            <p className={style.comentario__user_name}>Usuário: {avaliacao.us_id.username}</p>
-                            <p className={style.texto}>{avaliacao.av_comentario}</p>
+                            <div className={style.comentarioInfo}>
+                                <p className={style.comentario__user_name}>Usuário: {avaliacao.us_id.username}</p>
+                                <div className={style.tooltip}>
+                                    <Tooltip message={avaliacao.av_comentario}/>
+                                </div>
                             </div>
                             <div className={style.stars}>
                                 <Stars uid={"avaliacao__"+avaliacao.id} nota={avaliacao.nota}/>

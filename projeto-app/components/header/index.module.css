@@ -1,23 +1,43 @@
 .header {
     display: flex;
     height: 60px;
+    position: relative;
     justify-content: space-between;
-    background-color: #1C58ED;
-    padding: 15px;
+    align-items: center;
+    background-color: #14CCCC;
+    padding: 15px 30px 15px 30px;
+}
+
+.dropDown {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 80px;
+    height: 100%;
+    background-color: #14CCCC;
+}
+
+.dropDown:hover .logoutButton {
+    display: block;
+    visibility: visible;
 }
 
 .logoutButton {
+    display: none;
+    visibility: hidden;
     cursor: pointer;
+    color: #000000;
 }
 
 .opcoes {
     display: flex;
     align-items: center;
-    color: #EDAA05FF;
+    color: #000000;
 }
 
-.opcoes a:hover {
-    color: #EDAA05AA;
+.opcoes a:hover,
+.logoutButton:hover {
+    color: #000000AA;
 }
 
 .authenticate {
@@ -32,7 +52,18 @@
 }
 
 .userName {
-    font-size: 30px;
+    font-size: 18px;
     color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cartIcon {
+    cursor: pointer;
+}
+
+.cartIcon:hover {
+    color: rgba(0, 0, 0, 0.6);
 }

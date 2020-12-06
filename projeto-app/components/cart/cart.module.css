@@ -2,24 +2,26 @@
     position: fixed;
     right: 0;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    color: white;
+    background-color: #FEEDED;
+    color: black;
     height: 100vh;
     width: 300px;
     z-index: 1;
     padding: 0;
     margin: 0;
+    border-left: 0.5px solid rgba(0, 0, 0, 0.5);
 }
 
 .cartTitle {
     text-align: center;
     font-size: 25px;
+    padding: 15px;
 }
 
 .cartItems {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
     overflow-y: auto;
     height: calc(100vh - 115px);
 }
@@ -48,16 +50,23 @@
     position: relative;
     padding-left: 10px;
     padding-top: 5px;
-    background-color: rgba(100, 150, 150, 0.5);
+    margin: 0 10px;
+    background-color: #F3DDDD;
+    border-radius: 5px;
+}
+
+.cartItemGameName {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .cartItemActions {
     width: 50px;
     cursor: pointer;
-    padding: 8px;
+    padding: 1px;
     font-size: 18px;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     margin: 5px 10px 5px 0;
     outline: none;
     background-color: #00ccffe5;
@@ -69,13 +78,12 @@
     right: 0;
     width: 40px;
     cursor: pointer;
-    padding: 4px;
     font-size: 18px;
     border: none;
     border-radius: 5px;
     margin: 5px 10px 5px 0;
     outline: none;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
     font-weight: bolder;
     color: #db1d1de5;
 }
@@ -90,20 +98,37 @@
     flex-direction: column;
     width: 100%;
     bottom: 0px;
-    background-color: rgb(245, 78, 0);
+    background-color: #99B9B9;
 }
 
 .cartBottom p {
     text-align: center;
+    font-weight: bolder;
     padding: 15px 0 15px 0;
 }
 
 .cartBottom button {
     background-color: rgba(0, 0, 0, 0.2);
     padding: 5px;
-    color: white;
-    font-weight: bolder;
+    color: black;
     border: none;
     cursor: pointer;
     outline: none;
+}
+
+.cartBottom button svg {
+    position: relative;
+    font-size: 20px;
+}
+
+@keyframes animation_button {
+    from {left: 0px;}
+    to {left: 30px;}
+}
+
+.cartBottom button:hover svg {
+    animation-name: animation_button;
+    animation-duration: 0.3s;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
 }

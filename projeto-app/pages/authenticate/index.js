@@ -87,7 +87,7 @@ function Auth({dispatch}) {
             </Head>
             <Header/>
             <div className={style.container}>
-                <form>
+                <form className={style.formulario}>
                     { router.query.operation !== 'login' &&
                         <div className={style.credencial}>
                             <label className={style.label} htmlFor="userName">Username:</label>

@@ -6,3 +6,7 @@
     font-size: 30px;
     font-weight: lighter;
 }
+
+.goldStar {
+    color: rgba(255, 115, 0, 0.89);
+}
