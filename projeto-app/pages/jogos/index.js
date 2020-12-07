@@ -6,6 +6,7 @@ import Header from '../../components/header'
 import JogoApiRequest from '../src/core/JogoApiRequest'
 import {setJogos, nextPageJogos, previousPageJogos} from '../../redux/actions/jogosActions'
 import styles from './home.module.css'
+import Stars from '../../components/stars/Stars'
 
 function Jogos({dispatch, jogoReducer}) {
 
@@ -47,6 +48,11 @@ function Jogos({dispatch, jogoReducer}) {
                                     <Link href={`/jogos/${jogo.slug}`}>
                                         <a><p>{jogo.jg_nome}</p></a>
                                     </Link>
+                                </div>
+                                <div className={styles.jogoNota}>
+                                    <Stars 
+                                        uid={jogo.id}
+                                        nota={(jogo.jg_media || 0)}/>
                                 </div>
                             </div>
                         </li>

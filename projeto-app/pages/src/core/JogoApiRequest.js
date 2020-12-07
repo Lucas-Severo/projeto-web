@@ -12,6 +12,10 @@ class JogoApiRequest {
     countJogos() {
         return axios.get('http://localhost:1337/jogos/count')
     }
+
+    atualizarMedia(id) {
+        return axios.patch(`http://localhost:1337/jogos/${id}/average`)
+    }
 }
 
 export default new JogoApiRequest()

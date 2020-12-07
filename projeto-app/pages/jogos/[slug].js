@@ -6,6 +6,7 @@ import Stars from '../../components/stars/Stars'
 import Warning from '../../components/warnings/warning'
 import { addItem } from '../../redux/actions/main'
 import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage, setNota } from '../../redux/actions/avaliacoesActions'
+import { setJogo } from '../../redux/actions/jogosActions'
 import IsLogged from '../../utils/isLogged'
 import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
 import JogoApiRequest from '../src/core/JogoApiRequest'
@@ -17,15 +18,15 @@ import formatMoney from '../../utils/formatMoney'
 import Add from '@material-ui/icons/Add'
 import Send from '@material-ui/icons/Send'
 
-function Jogo({jogo, dispatch, avaliacaoReducer}) {
+function Jogo({jogo, dispatch, avaliacaoReducer, jogoReducer}) {
 
     const [avaliacao, setAvaliacao] = useState('')
-    const [stars, setStars] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [warnings, setWarnings] = useState('')
 
     useEffect(() => {
         dispatch(resetaPage())
+        dispatch(setJogo(jogo))
 
         setIsLoggedIn(IsLogged())
     }, [])
@@ -39,10 +40,6 @@ function Jogo({jogo, dispatch, avaliacaoReducer}) {
         const {data: totalItems} = await AvaliacaoApiRequest.countAvaliacoes(jogo.id)
         dispatch(setAvaliacoes(data, totalItems))
     }, [avaliacaoReducer.pagination.start, avaliacaoReducer.pagination.totalItems])
-
-    useEffect(() => {
-        setStars(avaliacaoReducer.notaMedia)
-    }, [avaliacaoReducer.notaMedia])
 
     const avancarPagina = () => {
         dispatch(nextPage())
@@ -60,7 +57,9 @@ function Jogo({jogo, dispatch, avaliacaoReducer}) {
                 nota: avaliacaoReducer.nota
             }
             const {data} = await AvaliacaoApiRequest.salvar(requestBody)
+            const {data: jogoResponse} = await JogoApiRequest.atualizarMedia(jogo.id)
             dispatch(addAvaliacao(data))
+            dispatch(setJogo(jogoResponse))
             limparCampos()
         }
     }
@@ -118,25 +117,25 @@ function Jogo({jogo, dispatch, avaliacaoReducer}) {
                         />
                         <div className={style.game__stars}>
                             <div className={style.jogoNota}>
-                                <Stars key={"jogo__"+jogo.id} 
-                                    uid={jogo.id}
-                                    nota={stars}/>
+                                <Stars key={"jogo__"+jogoReducer.jogo.id} 
+                                    uid={jogoReducer.jogo.id}
+                                    nota={(jogoReducer.jogo.jg_media || 0)}/>
                             </div>
                         </div>
                     </div>
                     <div className={`${style.infoContainer} ${style.tooltip}`}>
                         <p className={style.row}>Nome </p>
-                        <p className={style.row}>{jogo.jg_nome}</p>
+                        <p className={style.row}>{jogoReducer.jogo.jg_nome}</p>
                         <p className={style.row}>Descrição</p>
                         <div className={style.row}>
-                            <Tooltip message={jogo.jg_descricao}/>
+                            <Tooltip message={jogoReducer.jogo.jg_descricao}/>
                         </div>
                         <p className={style.row}>Categoria</p>
-                        <p className={style.row}>{humanizarCategorias(jogo.jg_categoria)}</p>
+                        <p className={style.row}>{humanizarCategorias(jogoReducer.jogo.jg_categoria)}</p>
                         <p className={style.row}>Desenvolvedora</p>
-                        <p className={style.row}>{jogo.jg_desenvolvedora}</p>
+                        <p className={style.row}>{jogoReducer.jogo.jg_desenvolvedora}</p>
                         <p className={style.row}>Preço</p>
-                        <p className={style.row}>{formatMoney(jogo.jg_preco)}</p>
+                        <p className={style.row}>{formatMoney(jogoReducer.jogo.jg_preco)}</p>
                     </div>
                     {isLoggedIn &&
                         <button 

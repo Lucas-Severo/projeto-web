@@ -1,6 +1,7 @@
 import 
 {
     ADD_JOGO, 
+    SET_JOGO,
     SET_JOGOS, 
     NEXT_PAGE_JOGOS, 
     PREVIOUS_PAGE_JOGOS
@@ -9,6 +10,7 @@ import
 
 const initialState = {
     jogos: [],
+    jogo: {},
     totalJogos: 0,
     pagination: {
         start: 0,
@@ -25,6 +27,9 @@ const jogoReducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_JOGO:
             state.jogos.push(action.payload)
+            return {...state}
+        case SET_JOGO:
+            state.jogo = action.payload
             return {...state}
         case SET_JOGOS:
             state.jogos = action.payload.jogos

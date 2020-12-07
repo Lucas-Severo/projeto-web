@@ -5,4 +5,21 @@
  * to customize this service
  */
 
-module.exports = {};
+module.exports = {
+
+    async updateGameAverage(id) {
+        const knex = strapi.connections.default;
+
+        const media = await knex('jogos')
+            .join('avaliacaos', 'avaliacaos.jg_id', '=', id)
+            .avg('nota')
+
+        const response = await strapi.query('jogo').update(
+            {id: id},
+            {jg_media: media[0].avg || 0}
+        )
+
+        return response
+    }
+
+};

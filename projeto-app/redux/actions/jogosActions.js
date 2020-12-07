@@ -1,6 +1,7 @@
 import 
 {
     ADD_JOGO, 
+    SET_JOGO,
     SET_JOGOS, 
     NEXT_PAGE_JOGOS, 
     PREVIOUS_PAGE_JOGOS
@@ -8,6 +9,11 @@ import
 
 export const addJogo = (jogo) => ({
     type: ADD_JOGO,
+    payload: jogo
+})
+
+export const setJogo = (jogo) => ({
+    type: SET_JOGO,
     payload: jogo
 })
 

@@ -53,6 +53,10 @@
     "slug": {
       "type": "uid",
       "required": true
+    },
+    "jg_media": {
+      "type": "decimal",
+      "default": 0
     }
   }
 }
