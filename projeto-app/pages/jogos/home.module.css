@@ -62,3 +62,36 @@
 .game_name:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.jogos_actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 10px;
+}
+
+.jogos_actions button {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.jogos_actions button:disabled {
+    cursor: not-allowed;
+}
+
+.jogoNota {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    max-width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    border: none;
+    border-bottom-left-radius: 10px;
+    padding: 8px;
+}
+
+.jogoNota p,
+.jogoNota svg {
+    font-size: 20px !important;
+}

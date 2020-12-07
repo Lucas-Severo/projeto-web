@@ -5,4 +5,12 @@
  * to customize this controller
  */
 
-module.exports = {};
+module.exports = {
+
+    async updateGameAverage(ctx) {
+        const {id} = ctx.params
+        const response = await strapi.services.jogo.updateGameAverage(Number(id))
+        return response
+    }
+
+};

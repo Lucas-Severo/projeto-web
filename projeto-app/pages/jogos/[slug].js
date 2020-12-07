@@ -6,6 +6,7 @@ import Stars from '../../components/stars/Stars'
 import Warning from '../../components/warnings/warning'
 import { addItem } from '../../redux/actions/main'
 import { addAvaliacao, setAvaliacoes, nextPage, previousPage, resetaPage, setNota } from '../../redux/actions/avaliacoesActions'
+import { setJogo } from '../../redux/actions/jogosActions'
 import IsLogged from '../../utils/isLogged'
 import AvaliacaoApiRequest from '../src/core/AvaliacaoApiRequest'
 import JogoApiRequest from '../src/core/JogoApiRequest'
@@ -17,52 +18,35 @@ import formatMoney from '../../utils/formatMoney'
 import Add from '@material-ui/icons/Add'
 import Send from '@material-ui/icons/Send'
 
-function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
+function Jogo({jogo, dispatch, avaliacaoReducer, jogoReducer}) {
 
-    const [nextButtonDisabled, setNextButtonDisabled] = useState(false)
-    const [previousButtonDisabled, setPreviousButtonDisabled] = useState(true)
     const [avaliacao, setAvaliacao] = useState('')
-    const [stars, setStars] = useState(0)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [warnings, setWarnings] = useState('')
 
     useEffect(() => {
         dispatch(resetaPage())
-        dispatch(setAvaliacoes(avaliacoes))
-
-        verificarBotoes()
+        dispatch(setJogo(jogo))
 
         setIsLoggedIn(IsLogged())
     }, [])
 
-    useEffect(() => {
-        setStars(avaliacaoReducer.notaMedia)
-    }, [avaliacaoReducer.notaMedia])
+    useEffect(async() => {
+        const {data} = await AvaliacaoApiRequest.buscarTodos(
+            jogo.id, 
+            avaliacaoReducer.pagination.start, 
+            avaliacaoReducer.pagination.limit)
+
+        const {data: totalItems} = await AvaliacaoApiRequest.countAvaliacoes(jogo.id)
+        dispatch(setAvaliacoes(data, totalItems))
+    }, [avaliacaoReducer.pagination.start, avaliacaoReducer.pagination.totalItems])
 
     const avancarPagina = () => {
-        dispatch(nextPage({page: avaliacaoReducer.pagination.page + 1}))
-
-        verificarBotoes()
+        dispatch(nextPage())
     }
 
     const retornarPagina = () => {
-        dispatch(previousPage({page: avaliacaoReducer.pagination.page - 1}))
-
-        verificarBotoes()
-    }
-
-    const verificarBotoes = () => {
-        if (avaliacaoReducer.pagination.page === 1) {
-            setPreviousButtonDisabled(true)
-        } else {
-            setPreviousButtonDisabled(false)
-        }
-
-        if (avaliacaoReducer.pagination.page >= avaliacaoReducer.pagination.totalPages) {
-            setNextButtonDisabled(true)
-        } else {
-            setNextButtonDisabled(false)
-        }
+        dispatch(previousPage())
     }
 
     const handleSaveComment = async () => {
@@ -73,8 +57,9 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                 nota: avaliacaoReducer.nota
             }
             const {data} = await AvaliacaoApiRequest.salvar(requestBody)
+            const {data: jogoResponse} = await JogoApiRequest.atualizarMedia(jogo.id)
             dispatch(addAvaliacao(data))
-            verificarBotoes()
+            dispatch(setJogo(jogoResponse))
             limparCampos()
         }
     }
@@ -132,25 +117,25 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                         />
                         <div className={style.game__stars}>
                             <div className={style.jogoNota}>
-                                <Stars key={"jogo__"+jogo.id} 
-                                    uid={jogo.id}
-                                    nota={stars}/>
+                                <Stars key={"jogo__"+jogoReducer.jogo.id} 
+                                    uid={jogoReducer.jogo.id}
+                                    nota={(jogoReducer.jogo.jg_media || 0)}/>
                             </div>
                         </div>
                     </div>
                     <div className={`${style.infoContainer} ${style.tooltip}`}>
                         <p className={style.row}>Nome </p>
-                        <p className={style.row}>{jogo.jg_nome}</p>
+                        <p className={style.row}>{jogoReducer.jogo.jg_nome}</p>
                         <p className={style.row}>Descrição</p>
                         <div className={style.row}>
-                            <Tooltip message={jogo.jg_descricao}/>
+                            <Tooltip message={jogoReducer.jogo.jg_descricao}/>
                         </div>
                         <p className={style.row}>Categoria</p>
-                        <p className={style.row}>{humanizarCategorias(jogo.jg_categoria)}</p>
+                        <p className={style.row}>{humanizarCategorias(jogoReducer.jogo.jg_categoria)}</p>
                         <p className={style.row}>Desenvolvedora</p>
-                        <p className={style.row}>{jogo.jg_desenvolvedora}</p>
+                        <p className={style.row}>{jogoReducer.jogo.jg_desenvolvedora}</p>
                         <p className={style.row}>Preço</p>
-                        <p className={style.row}>{formatMoney(jogo.jg_preco)}</p>
+                        <p className={style.row}>{formatMoney(jogoReducer.jogo.jg_preco)}</p>
                     </div>
                     {isLoggedIn &&
                         <button 
@@ -162,7 +147,9 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                     }
                 </div>
 
-                <h1 className={style.comentarios__title}>Comentários ({avaliacaoReducer.avaliacoes.length})</h1>
+                <h1 className={style.comentarios__title}>
+                    Comentários ({avaliacaoReducer.pagination.totalItems})
+                </h1>
                 
                 {
                     isLoggedIn && <div className={style.comentarioSession}>
@@ -184,7 +171,7 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
                 }
                 <ul className={style.comentarios}>
                 {
-                    avaliacaoReducer.avaliacao_paginate.map(avaliacao => (
+                    avaliacaoReducer.avaliacoes.map(avaliacao => (
                         <li className={style.comentario} key={avaliacao.id}>
                             <div className={style.comentarioInfo}>
                                 <p className={style.comentario__user_name}>Usuário: {avaliacao.us_id.username}</p>
@@ -202,10 +189,10 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 
                 <div className={style.comentario_actions}>
                     <button 
-                        disabled={previousButtonDisabled}
+                        disabled={avaliacaoReducer.previousButtonDisabled}
                         onClick={retornarPagina}>Anterior</button>
                     <button 
-                        disabled={nextButtonDisabled}
+                        disabled={avaliacaoReducer.nextButtonDisabled}
                         onClick={avancarPagina}>Próximo</button>
                 </div>
             </div>
@@ -214,19 +201,11 @@ function Jogo({jogo, avaliacoes, dispatch, avaliacaoReducer}) {
 }
 
 export async function getServerSideProps({query}) {
-    const response = await JogoApiRequest.obterJogo(query.id)
-
-    const avaliacoes = []
-
-    for(let avaliacao of response.data.avaliacoes) {
-        const {data} = await AvaliacaoApiRequest.buscarPorId(avaliacao.id)
-        avaliacoes.push(data)
-    }
+    const {data} = await JogoApiRequest.obterJogo(query.slug)
 
     return {
         props: {
-           jogo: response.data,
-           avaliacoes: avaliacoes
+           jogo: data[0]
         }
     }
 }

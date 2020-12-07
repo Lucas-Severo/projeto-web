@@ -6,6 +6,14 @@ class AvaliacaoApiRequest {
         return axios.get(`http://localhost:1337/avaliacaos/${id}`)
     }
 
+    buscarTodos(jogoId, start, limit) {
+        return axios.get(`http://localhost:1337/avaliacaos?jg_id.id=${jogoId}&_start=${start}&_limit=${limit}&_sort=id`)
+    }
+
+    countAvaliacoes(jogoId) {
+        return axios.get(`http://localhost:1337/avaliacaos/count?jg_id.id=${jogoId}`)
+    }
+
     salvar(comentario) {
         const userId = getCredentials.getUserId()
         const authorization = getCredentials.getUserToken()

@@ -10,9 +10,9 @@ import style from './index.module.css'
 function Auth({dispatch}) {
 
     const router = useRouter();
-    const [userName, setUserName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
     const [sucess, setSucess] = useState(false);
     const [informationMessage, setInformationMessage] = useState();

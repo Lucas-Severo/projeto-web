@@ -47,6 +47,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "PATCH",
+      "path": "/jogos/:id/average",
+      "handler": "jogo.updateGameAverage",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

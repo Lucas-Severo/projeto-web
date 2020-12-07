@@ -26,9 +26,17 @@ function SelectNota({dispatch, avaliacaoReducer}) {
         const estrelas = []
         for(let i = 0; i < 5; i++) {
             if (i <= index) {
-                estrelas.push(<StarOutlinedIcon className={style.nota_selecionada} onClick={() => tratarEventoEstrelaPintar(i)}/>)
+                estrelas.push(
+                    <StarOutlinedIcon 
+                        className={style.nota_selecionada} 
+                        key={"select_nota_"+i}
+                        onClick={() => tratarEventoEstrelaPintar(i)}/>)
             } else {
-                estrelas.push(<StarOutlineOutlinedIcon className={style.nota} onClick={() => tratarEventoEstrelaPintar(i)}/>)
+                estrelas.push(
+                    <StarOutlineOutlinedIcon 
+                        className={style.nota} 
+                        key={"select_nota_"+i}
+                        onClick={() => tratarEventoEstrelaPintar(i)}/>)
             }
         }
         await setNotas([])
@@ -38,7 +46,12 @@ function SelectNota({dispatch, avaliacaoReducer}) {
     const limparEstrelas = async () => {
         const estrelas = []
         for(let i = 0; i < 5; i++) {
-            estrelas.push(<StarOutlineOutlinedIcon className={style.nota} onClick={() => tratarEventoEstrelaPintar(i)}/>)
+            estrelas.push(
+                <StarOutlineOutlinedIcon 
+                    className={style.nota} 
+                    key={"select_nota_"+i}
+                    onClick={() => tratarEventoEstrelaPintar(i)}/>
+            )
         }
         await setNotas([])
         inserirNotas(estrelas)

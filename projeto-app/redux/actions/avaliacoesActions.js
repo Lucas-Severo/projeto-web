@@ -5,9 +5,12 @@ export const addAvaliacao = (item) => ({
     payload: item
 })
 
-export const setAvaliacoes = (item) => ({
+export const setAvaliacoes = (item, totalItems) => ({
     type: SET_AVALIACOES,
-    payload: item
+    payload: {
+        item, 
+        totalItems
+    }
 })
 
 export const nextPage = () => ({

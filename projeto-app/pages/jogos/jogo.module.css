@@ -72,6 +72,9 @@
 
 .comentario__user_name {
     color: #123F;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .comentario .texto {

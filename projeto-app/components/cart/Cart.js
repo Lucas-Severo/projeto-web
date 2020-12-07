@@ -31,7 +31,7 @@ function Cart({dispatch, state, cartReducer}) {
                 <div className={style.cartItems}>
                     {
                         state.items.map((item) => (
-                            <div className={style.cartItem}>
+                            <div className={style.cartItem} key={"cart_item_"+item.id}>
                                 <p className={style.cartItemGameName}>{item.jg_nome}</p>
                                 <p>Quantidade: {item.quantidade}</p>
                                 <p>Preço: {formatMoney(item.jg_preco)}</p>
