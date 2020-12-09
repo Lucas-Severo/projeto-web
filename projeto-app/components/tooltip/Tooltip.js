@@ -1,7 +1,7 @@
 import style from './tooltip.module.css'
 import {useState} from 'react'
 
-export default function Tooltip({message}) {
+export default function Tooltip({message, icon}) {
 
     const [toggle, setToggle] = useState(false)
 
@@ -20,12 +20,16 @@ export default function Tooltip({message}) {
                 (
                     <div
                         className={style.tooltip}>
-                        <p>{message}</p>
+                        {
+                            <p>{message}</p>
+                        }
                     </div>
                 )
             }
             <p className={style.description}
-                onMouseOver={enableToggle}>{message}</p>
+                onMouseOver={enableToggle}>
+                {icon !== undefined ? (icon):(message)}
+            </p>
         </div>
     )
 

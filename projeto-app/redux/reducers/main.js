@@ -1,4 +1,12 @@
-import { ADD_ITEM, DECREMENT_ITEM, GET_ITEMS, INCREMENT_ITEM, REMOVE_ITEM } from '../actions/actionTypes'
+import 
+{ 
+    ADD_ITEM, 
+    DECREMENT_ITEM, 
+    GET_ITEMS, 
+    INCREMENT_ITEM, 
+    REMOVE_ITEM, 
+    LIMPAR_CARRINHO 
+} from '../actions/actionTypes'
 
 const initialState = {
     items: [],
@@ -57,6 +65,10 @@ const main = (state = initialState, action) => {
                     return {...item, quantidade: item.quantidade - 1}
                 }
             })
+            state.totalPrice = calcularValorTotal(state)
+            return {...state}
+        case LIMPAR_CARRINHO:
+            state.items = []
             state.totalPrice = calcularValorTotal(state)
             return {...state}
         default:

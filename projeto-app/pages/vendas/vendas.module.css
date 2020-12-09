@@ -1,0 +1,68 @@
+.vendasContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 30px;
+}
+
+.vendasContainer table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableHeader {
+    background-color: lightgray;
+}
+
+
+.headerRow th {
+    text-align: start;
+    padding: 5px 10px 5px;
+}
+
+.tableBody tr {
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.tableBody tr:nth-child(odd) {
+    background-color: rgb(250, 235, 235);
+}
+
+.tableBody tr:nth-child(even) {
+    background-color:  rgb(228, 205, 205);
+}
+
+.tableBody tr td {
+    padding: 8px;
+    border: none;
+}
+
+.noData {
+    text-align: center;
+    height: 50px;
+}
+
+.countVendas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    font-size: 20px;
+}
+
+.vendas_pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    gap: 10px;
+}
+
+.vendas_pagination button {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.vendas_pagination button:disabled {
+    cursor: not-allowed;
+}
