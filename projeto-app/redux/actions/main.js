@@ -1,4 +1,4 @@
-import { ADD_ITEM, DECREMENT_ITEM, GET_ITEMS, INCREMENT_ITEM, REMOVE_ITEM } from './actionTypes'
+import { ADD_ITEM, DECREMENT_ITEM, GET_ITEMS, INCREMENT_ITEM, REMOVE_ITEM, LIMPAR_CARRINHO } from './actionTypes'
 
 export const addItem = (item) => ({
     type: ADD_ITEM,
@@ -22,4 +22,8 @@ export const incrementItem = (item) => ({
 export const decrementItem = (item) => ({
     type: DECREMENT_ITEM,
     payload: item
+})
+
+export const limparCarrinho = () => ({
+    type: LIMPAR_CARRINHO
 })

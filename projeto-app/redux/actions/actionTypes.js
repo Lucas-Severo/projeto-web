@@ -11,6 +11,8 @@ export const CLOSE_CART = 'CLOSE_CART'
 export const INCREMENT_ITEM = 'INCREMENT_ITEM'
 export const DECREMENT_ITEM = 'DECREMENT_ITEM'
 
+export const LIMPAR_CARRINHO = 'LIMPAR_CARRINHO'
+
 // Avaliação
 
 export const ADD_AVALIACAO = 'ADD_AVALIACAO'
@@ -27,3 +29,10 @@ export const SET_JOGO = 'SET_JOGO'
 export const SET_JOGOS = 'SET_JOGOS'
 export const NEXT_PAGE_JOGOS = 'NEXT_PAGE_JOGOS'
 export const PREVIOUS_PAGE_JOGOS = 'PREVIOUS_PAGE_JOGOS'
+
+
+// Vendas
+
+export const SET_VENDAS = 'SET_VENDAS'
+export const NEXT_PAGE_VENDAS = 'NEXT_PAGE_VENDAS'
+export const PREVIOUS_PAGE_VENDAS = 'PREVIOUS_PAGE_VENDAS'

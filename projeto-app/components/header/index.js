@@ -51,6 +51,9 @@ function Header({dispatch, userReducer}) {
                 {
                     isLoggedIn ? (
                         <div className={style.userContainer}>
+                            <Link href='/vendas'>
+                                <a>Ver compras</a>
+                            </Link>
                             <div className={style.dropDown}>
                                 <p className={style.userName}>{userName}</p>
                                 <div onClick={handleLogout}>

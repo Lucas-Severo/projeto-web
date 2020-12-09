@@ -20,6 +20,9 @@
     },
     "quantidade": {
       "type": "integer"
+    },
+    "jg_preco": {
+      "type": "decimal"
     }
   }
 }
