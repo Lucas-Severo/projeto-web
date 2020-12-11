@@ -8,16 +8,24 @@
 
 Configurar os níveis e permissões (public e authenticated) da seguinte forma
 
-1. Public 
+Para configurar os perfis e permissões, utilize o arquivo que está na pasta readme [permissions.csv](./readme/permissions.csv)
 
-<img height="300px" src="./readme/public_1.png"/>
+Para isso siga os passos:
 
-<img height="300px" src="./readme/public_2.png"/>
+1. Entre no banco de dados
 
-2. Authenticated
+`psql -h 127.0.0.1 -p 5432 -d nome_banco -U usuario -W`
 
-<img height="300px" src="./readme/authenticated_1.png"/>
+Dê enter e digite a senha
 
-<img height="300px" src="./readme/authenticated_3.png"/>
+2. Apague as informações da tabela de permissões
 
-<img height="100px" src="./readme/authenticated_2.png"/>
+`DELETE FROM "users-permissions_permission";`
+
+3. Copie as informações para a tabela de permissões
+
+*/path/to/ = Caminho absoluto até o arquivo de permissões*
+
+`COPY "users-permissions_permission" FROM '/path/to/readme/permissions.csv' DELIMITER ',' NULL AS 'null' csv;`
+
+Com isso todas as configurações necessárias de perfis e permissões no sistema já estarão configuradas
